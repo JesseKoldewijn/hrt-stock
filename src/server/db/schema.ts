@@ -22,13 +22,6 @@ export const countries = mysqlTable(
   "countries",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    countryId: bigint("country_id", { mode: "number" }),
-    currencyId: bigint("currency_id", { mode: "number" }),
-    languageId: bigint("language_id", { mode: "number" }),
-    demonymId: bigint("demonym_id", { mode: "number" }),
-    timezoneId: bigint("timezone_id", { mode: "number" }),
-    continentId: bigint("continent_id", { mode: "number" }),
-    flagId: bigint("flag_id", { mode: "number" }),
     officialName: varchar("official_name", { length: 256 }),
     commonName: varchar("common_name", { length: 256 }),
     nativeNameEngOfficial: varchar("native_name_eng_official", { length: 256 }),
@@ -50,13 +43,6 @@ export const countries = mysqlTable(
   },
   (c) => ({
     countryIndex: index("country_idx").on(c.id),
-    countryForeignKey: index("country_fk").on(c.countryId),
-    currencyForeignKey: index("currency_fk").on(c.currencyId),
-    languageForeignKey: index("language_fk").on(c.languageId),
-    demonymForeignKey: index("demonym_fk").on(c.demonymId),
-    timezoneForeignKey: index("timezone_fk").on(c.timezoneId),
-    continentForeignKey: index("continent_fk").on(c.continentId),
-    flagForeignKey: index("flag_fk").on(c.flagId),
   }),
 );
 
