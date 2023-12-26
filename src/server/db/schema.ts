@@ -22,27 +22,33 @@ export const countries = mysqlTable(
   "countries",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    officialName: varchar("official_name", { length: 256 }),
-    commonName: varchar("common_name", { length: 256 }),
-    nativeNameEngOfficial: varchar("native_name_eng_official", { length: 256 }),
-    nativeNameEngCommon: varchar("native_name_eng_common", { length: 256 }),
-    currencyName: varchar("currency_name", { length: 256 }),
-    currencySymbol: varchar("currency_symbol", { length: 256 }),
-    languageCode: varchar("language_code", { length: 256 }),
-    languageName: varchar("language_name", { length: 256 }),
-    femaleDemonym: varchar("female_demonym", { length: 256 }),
-    maleDemonym: varchar("male_demonym", { length: 256 }),
-    timezone: varchar("timezone", { length: 256 }),
-    continent: varchar("continent", { length: 256 }),
-    pngFlag: varchar("png_flag", { length: 256 }),
-    svgFlag: varchar("svg_flag", { length: 256 }),
-    pngCoatOfArms: varchar("png_coat_of_arms", { length: 256 }),
-    svgCoatOfArms: varchar("svg_coat_of_arms", { length: 256 }),
-    postalCodeFormat: varchar("postal_code_format", { length: 256 }),
-    postalCodeRegex: varchar("postal_code_regex", { length: 256 }),
+    nameCommon: varchar("name_common", { length: 256 }),
+    nameOfficial: varchar("name_official", { length: 256 }),
+    nameNative: varchar("name_native", { length: 256 }),
+    cca2: varchar("cca2", { length: 256 }),
+    cca3: varchar("cca3", { length: 256 }),
+    currencies: varchar("currencies", { length: 256 }),
+    timeZones: varchar("time_zones", { length: 256 }),
+    flags: varchar("flags", { length: 556 }),
   },
   (c) => ({
     countryIndex: index("country_idx").on(c.id),
+  }),
+);
+
+export const stocks = mysqlTable(
+  "stocks",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    country: varchar("country", { length: 256 }),
+    brand: varchar("brand", { length: 256 }),
+    type: varchar("type", { length: 256 }),
+    desc: varchar("description", { length: 256 }),
+    stock: bigint("stock", { mode: "number" }),
+    location: varchar("location", { length: 256 }),
+  },
+  (c) => ({
+    stockIndex: index("stock_idx").on(c.id),
   }),
 );
 
