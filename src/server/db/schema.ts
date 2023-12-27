@@ -51,16 +51,3 @@ export const stocks = mysqlTable(
     stockIndex: index("stock_idx").on(c.id),
   }),
 );
-
-// Kind of a hack because there's no infer prop for mysql tables in Drizzle ORM
-// But I still see the usage of Drizzle as a win since it doesn't use a large
-// rust binary like Prisma does. And it's a lot more raw and flexible.
-type RecursiveColumns<T> = {
-  [K in keyof T]: T[K] extends object ? RecursiveColumns<T[K]> : T[K];
-};
-
-/**
- * This is the type of the `countries` table. It's a recursive type that
- * includes all the columns and their types.
- */
-export type Countries = RecursiveColumns<(typeof countries)["$columns"]>;
