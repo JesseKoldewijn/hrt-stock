@@ -8,6 +8,7 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
 
     /* Strictness */
     "strict": true,
@@ -27,7 +28,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    /* NodeModule types */
+    "types": ["node", "pg"]
   },
   "include": [
     ".eslintrc.cjs",

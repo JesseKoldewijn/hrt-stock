@@ -1,13 +1,12 @@
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle } from "drizzle-orm/node-postgres";
 
 import { env } from "@/env";
 
-import { createConnection } from "mysql2/promise";
+import { Client } from "pg";
 
-const connection = await createConnection({
-  uri: env.DATABASE_URL,
-  port: 3306,
-  ssl: "false",
+const connection = new Client({
+  connectionString: env.DATABASE_URL,
+  ssl: false,
 });
 
 export const db = drizzle(connection);
