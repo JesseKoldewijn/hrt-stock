@@ -40,23 +40,23 @@ const importCountryData = async () => {
     // For some reason, query below silently fails
     await db.insert(countries).values(cleanedCountries).execute();
 
-    // Falling back to fetch post request to laravel backend
-    try {
-      const req = await fetch("http://localhost:8000/api/countries/storeMany", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          countries: cleanedCountries,
-        }),
-      });
+    // // Falling back to fetch post request to laravel backend
+    // try {
+    //   const req = await fetch("http://localhost:8000/api/countries/storeMany", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       countries: cleanedCountries,
+    //     }),
+    //   });
 
-      const res = (await req.json()) as unknown;
-      console.log("Finished importing country data", res);
-    } catch (e) {
-      console.error(e);
-    }
+    //   const res = (await req.json()) as unknown;
+    //   console.log("Finished importing country data", res);
+    // } catch (e) {
+    //   console.error(e);
+    // }
   } catch (e) {
     console.error(e);
   }
