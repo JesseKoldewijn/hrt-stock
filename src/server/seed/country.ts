@@ -1,17 +1,16 @@
 import { type Country } from "@/types/countries";
-import { countries } from "../db/schema.ts";
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from "pg";
+import { drizzle } from "drizzle-orm/mysql2";
 
 import dotEnv from "dotenv";
+import { createConnection } from "mysql2/promise";
+import { countries } from "../db/schema.ts";
 
-dotEnv.config({
-  path: "../../../.env",
-});
+dotEnv.config();
 
 const importCountryData = async () => {
-  const connection = new pg.Client({
-    connectionString: process.env.DATABASE_URL,
+  const connection = await createConnection({
+    uri: process.env.DATABASE_URL,
+    database: "hrt-countries",
   });
 
   const db = drizzle(connection);
@@ -40,7 +39,24 @@ const importCountryData = async () => {
     console.log("Start importing country data");
     // For some reason, query below silently fails
     await db.insert(countries).values(cleanedCountries).execute();
-    console.log("Finished importing country data");
+
+    // Falling back to fetch post request to laravel backend
+    try {
+      const req = await fetch("http://localhost:8000/api/countries/storeMany", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          countries: cleanedCountries,
+        }),
+      });
+
+      const res = (await req.json()) as unknown;
+      console.log("Finished importing country data", res);
+    } catch (e) {
+      console.error(e);
+    }
   } catch (e) {
     console.error(e);
   }

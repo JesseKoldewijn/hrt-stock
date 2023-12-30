@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { bigint, pgTableCreator, uuid, varchar } from "drizzle-orm/pg-core";
+import { bigint, mysqlTableCreator, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -9,28 +9,28 @@ import { bigint, pgTableCreator, uuid, varchar } from "drizzle-orm/pg-core";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const pgTable = pgTableCreator(
+export const mysqlTable = mysqlTableCreator(
   (name) => `hrt-countries.jkinsight.nl_${name}`,
 );
 
-export const countries = pgTable("countries", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  nameCommon: varchar("name_common", { length: 256 }),
-  nameOfficial: varchar("name_official", { length: 256 }),
-  nameNative: varchar("name_native", { length: 256 }),
-  cca2: varchar("cca2", { length: 256 }),
-  cca3: varchar("cca3", { length: 256 }),
-  currencies: varchar("currencies", { length: 256 }),
-  timeZones: varchar("time_zones", { length: 256 }),
-  flags: varchar("flags", { length: 556 }),
+export const countries = mysqlTable("countries", {
+  id: bigint("id", { mode: "bigint" }).autoincrement().primaryKey(),
+  nameCommon: varchar("name_common", { length: 1500 }),
+  nameOfficial: varchar("name_official", { length: 1500 }),
+  nameNative: varchar("name_native", { length: 1500 }),
+  cca2: varchar("cca2", { length: 1500 }),
+  cca3: varchar("cca3", { length: 1500 }),
+  currencies: varchar("currencies", { length: 1500 }),
+  timeZones: varchar("time_zones", { length: 1500 }),
+  flags: varchar("flags", { length: 1500 }),
 });
 
-export const stocks = pgTable("stocks", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  country: varchar("country", { length: 256 }),
-  brand: varchar("brand", { length: 256 }),
-  type: varchar("type", { length: 256 }),
-  desc: varchar("description", { length: 256 }),
+export const stocks = mysqlTable("stocks", {
+  id: bigint("id", { mode: "bigint" }).autoincrement().primaryKey(),
+  country: varchar("country", { length: 1500 }),
+  brand: varchar("brand", { length: 1500 }),
+  type: varchar("type", { length: 1500 }),
+  desc: varchar("description", { length: 1500 }),
   stock: bigint("stock", { mode: "number" }),
-  location: varchar("location", { length: 256 }),
+  location: varchar("location", { length: 1500 }),
 });
