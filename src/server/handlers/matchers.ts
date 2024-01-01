@@ -23,28 +23,32 @@ export const findCountry = async (matchString: string) => {
       : countryInput;
 
     const stringIsCommonName = country.nameCommon
-      ? stringCompare.jaroWinkler.similarity(
+      ? matchString !== "unknown" &&
+        stringCompare.jaroWinkler.similarity(
           country.nameCommon.toLowerCase(),
           matchString.toLowerCase(),
         ) > 0.82
       : false;
 
     const stringIsNameOfficial = country.nameOfficial
-      ? stringCompare.jaroWinkler.similarity(
+      ? matchString !== "unknown" &&
+        stringCompare.jaroWinkler.similarity(
           country.nameOfficial.toLowerCase(),
           matchString.toLowerCase(),
         ) > 0.82
       : false;
 
     const stringIsCCA2 = country.cca2
-      ? stringCompare.jaroWinkler.similarity(
+      ? matchString !== "unknown" &&
+        stringCompare.jaroWinkler.similarity(
           country.cca2.toLowerCase(),
           matchString.toLowerCase(),
         ) > 0.82
       : false;
 
     const stringIsCCA3 = country.cca3
-      ? stringCompare.jaroWinkler.similarity(
+      ? matchString !== "unknown" &&
+        stringCompare.jaroWinkler.similarity(
           country.cca3.toLowerCase(),
           matchString.toLowerCase(),
         ) > 0.82
