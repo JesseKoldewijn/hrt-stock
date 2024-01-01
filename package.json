@@ -10,6 +10,7 @@
     "db:push": "dotenv drizzle-kit push:mysql",
     "db:studio": "dotenv drizzle-kit studio",
     "db:seed:countries": "ts-node --esm --transpile-only --project tsconfig.json ./src/server/seed/country.ts",
+    "db:seed:stock": "ts-node --esm --transpile-only --project tsconfig.json ./src/server/seed/stock.ts",
     "tw:config-viewer": "tailwind-config-viewer --config ./tailwind.config.cjs --port 3002",
     "lint": "next lint"
   },

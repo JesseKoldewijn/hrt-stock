@@ -30,7 +30,11 @@ export const stocks = mysqlTable("stocks", {
   country: varchar("country", { length: 1500 }),
   brand: varchar("brand", { length: 1500 }),
   type: varchar("type", { length: 1500 }),
-  desc: varchar("description", { length: 1500 }),
+  description: varchar("description", { length: 1500 }),
   stock: bigint("stock", { mode: "number" }),
   location: varchar("location", { length: 1500 }),
 });
+
+// types infered from the schema
+export type SelectCountry = typeof countries._.model.select;
+export type SelectStock = typeof stocks._.model.select;

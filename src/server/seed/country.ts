@@ -22,43 +22,38 @@ const importCountryData = async () => {
   }
 
   const countryData = (await cd.json()) as Country[];
+  const dbCountries = await db.select().from(countries).execute();
+
   const cleanedCountries = countryData.map((c) => {
     return {
-      name_common: c.name.common,
-      name_official: c.name.official,
-      name_native: c.name.nativeName ? JSON.stringify(c.name.nativeName) : null,
+      id: dbCountries.find((dbC) => dbC.cca3 === c.cca3)?.id,
+      nameCommon: c.name.common,
+      nameOfficial: c.name.official,
+      nameNative: c.name.nativeName ? JSON.stringify(c.name.nativeName) : null,
       cca2: c.cca2,
       cca3: c.cca3,
       currencies: c.currencies ? JSON.stringify(c.currencies) : null,
-      time_zones: c.timezones.toString(),
+      timeZones: c.timezones.toString(),
       flags: c.flags ? JSON.stringify(c.flags) : null,
     };
   });
 
   try {
     console.log("Start importing country data");
-    // For some reason, query below silently fails
+    // Wiping old data
+    if (
+      cleanedCountries.length > 0 &&
+      cleanedCountries.filter((c) => c.id).length > 0
+    ) {
+      await db.delete(countries).execute();
+    }
+    // Inserting new data
     await db.insert(countries).values(cleanedCountries).execute();
-
-    // // Falling back to fetch post request to laravel backend
-    // try {
-    //   const req = await fetch("http://localhost:8000/api/countries/storeMany", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       countries: cleanedCountries,
-    //     }),
-    //   });
-
-    //   const res = (await req.json()) as unknown;
-    //   console.log("Finished importing country data", res);
-    // } catch (e) {
-    //   console.error(e);
-    // }
+    console.log("Finished importing country data");
   } catch (e) {
     console.error(e);
   }
 };
-importCountryData().catch((e) => console.error(e));
+importCountryData()
+  .then(() => console.log("Process finished"))
+  .catch((e) => console.error(e));

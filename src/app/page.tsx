@@ -1,21 +1,16 @@
-import { type Country } from "@/types/countries";
+import { getStocksWithCountry } from "@/server/handlers/getters";
 
 const Home = async () => {
-  const data = await fetch("https://restcountries.com/v3.1/all");
-  const countries = (await data.json()) as Country[];
+  const stockWithCountry = await getStocksWithCountry();
+  const filterByCountry = stockWithCountry.filter(
+    (stock) => stock.country && stock.countryData?.cca2 !== "NL",
+  );
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      Hello Mom!
-      <div>
-        {countries
-          .filter((_c, idx) => idx < 1)
-          .map((c) => (
-            <pre key={c.name.common} className="w-screen overflow-auto">
-              {JSON.stringify(c, null, 2)}
-            </pre>
-          ))}
-      </div>
+      <pre className="flex max-w-md">
+        {JSON.stringify(filterByCountry, null, 2)}
+      </pre>
     </main>
   );
 };
