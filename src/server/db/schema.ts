@@ -13,18 +13,6 @@ export const mysqlTable = mysqlTableCreator(
   (name) => `hrt-countries.jkinsight.nl_${name}`,
 );
 
-export const countries = mysqlTable("countries", {
-  id: bigint("id", { mode: "bigint" }).autoincrement().primaryKey(),
-  nameCommon: varchar("name_common", { length: 1500 }),
-  nameOfficial: varchar("name_official", { length: 1500 }),
-  nameNative: varchar("name_native", { length: 1500 }),
-  cca2: varchar("cca2", { length: 1500 }),
-  cca3: varchar("cca3", { length: 1500 }),
-  currencies: varchar("currencies", { length: 1500 }),
-  timeZones: varchar("time_zones", { length: 1500 }),
-  flags: varchar("flags", { length: 1500 }),
-});
-
 export const stocks = mysqlTable("stocks", {
   id: bigint("id", { mode: "bigint" }).autoincrement().primaryKey(),
   country: varchar("country", { length: 1500 }),
@@ -36,5 +24,8 @@ export const stocks = mysqlTable("stocks", {
 });
 
 // types infered from the schema
-export type SelectCountry = typeof countries._.model.select;
-export type SelectStock = typeof stocks._.model.select;
+type StockSchema = Omit<typeof stocks._.model.select, "id">;
+interface StockSchemaSanitized extends StockSchema {
+  id: number;
+}
+export type SelectStock = StockSchemaSanitized;

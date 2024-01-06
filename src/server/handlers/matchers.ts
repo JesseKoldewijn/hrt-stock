@@ -1,26 +1,20 @@
-import { db } from "@/server/db";
-import { type SelectCountry, countries } from "@/server/db/schema";
 import { type Country } from "@/types/countries";
 import stringCompare from "string-comparison";
 
 export const findCountry = async (matchString: string) => {
-  const countryData = await db.select().from(countries);
+  const countryRes = await fetch("https://restcountries.com/v3.1/all");
+  const countryData = (await countryRes.json()) as Country[];
 
   const matchedCountries = new Set();
 
-  const findMatch = async (
-    countryInput: SelectCountry,
-    isRemoteData?: boolean,
-  ) => {
+  const findMatch = async (countryInput: Country) => {
     const c = countryInput as unknown as Country;
-    const country = isRemoteData
-      ? {
-          nameCommon: c.name.common,
-          nameOfficial: c.name.official,
-          cca2: c.cca2,
-          cca3: c.cca3,
-        }
-      : countryInput;
+    const country = {
+      nameCommon: c.name.common,
+      nameOfficial: c.name.official,
+      cca2: c.cca2,
+      cca3: c.cca3,
+    };
 
     const stringIsCommonName = country.nameCommon
       ? matchString !== "unknown" &&
@@ -65,43 +59,27 @@ export const findCountry = async (matchString: string) => {
     }
   };
 
-  countryData.map((c) => findMatch(c, false));
+  countryData.map((c) => findMatch(c));
 
   const matchedCountryName = matchedCountries.values().next().value as string;
   const matchedCountryData = countryData.find(
-    (country) => country.nameCommon === matchedCountryName,
+    (country) => country.name.common === matchedCountryName,
   );
   const matchedCountryDataCleaned = () => {
     if (!matchedCountryData) return null;
-    const { id, ...rest } = matchedCountryData;
+    const rest = matchedCountryData;
     const newData = {} as Country;
 
     Object.keys(rest).forEach((key) => {
       const keyTyped = key as keyof typeof rest;
       const value = rest[keyTyped];
 
-      const dataNeedsSplit = keyTyped === "timeZones";
-      const dataNeedsParsing =
-        keyTyped === "currencies" ||
-        keyTyped === "flags" ||
-        keyTyped === "nameNative";
-
-      if (value && dataNeedsParsing) {
-        // @ts-expect-error - no fix required
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        newData[keyTyped] = JSON.parse(value) as Country[typeof keyTyped];
-      } else if (value && dataNeedsSplit) {
-        // @ts-expect-error - no fix required
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        newData[keyTyped] = value.split(",") as Country[typeof keyTyped];
-      } else {
-        // @ts-expect-error - no fix required
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        newData[keyTyped] = value as Country[typeof keyTyped];
-      }
+      // @ts-expect-error - no fix required
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      newData[keyTyped] = value as Country[typeof keyTyped];
     });
 
-    return { id: parseInt(id.toString()), ...newData } as Country;
+    return { ...newData } as Country;
   };
   return matchedCountryDataCleaned() ?? null;
 };
