@@ -24,8 +24,7 @@ export const stocks = mysqlTable("stocks", {
 });
 
 // types infered from the schema
-type StockSchema = Omit<typeof stocks._.model.select, "id">;
-interface StockSchemaSanitized extends StockSchema {
+export type SelectStock = typeof stocks._.model.select;
+export interface SelectStockSanitized extends Omit<SelectStock, "id"> {
   id: number;
 }
-export type SelectStock = StockSchemaSanitized;

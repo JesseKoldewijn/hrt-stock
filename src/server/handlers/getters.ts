@@ -1,31 +1,38 @@
-import { type SelectStock, stocks } from "@/server/db/schema";
+import { stocks, type SelectStockSanitized } from "@/server/db/schema";
 import { db } from "@/server/db";
-import { findCountry } from "./matchers";
 import { type Country } from "@/types/countries";
 
-export type StockWithCountry = {
-  id: number;
-  name: string;
-  symbol: string;
-  country: string;
-  countryData: Country | null;
+export const getStocks = async () => {
+  const stocksArray = (await db.select().from(stocks)).flatMap((x) => {
+    const { id, ...rest } = x;
+    return {
+      id: Number(id),
+      ...rest,
+    };
+  }) as never as SelectStockSanitized[];
+
+  if (!stocksArray) {
+    throw new Error("No stock found");
+  }
+
+  return stocksArray.reduce(
+    (acc: Record<string, SelectStockSanitized[]>, stock) => {
+      const country = stock.country ?? "Other";
+      const countryData = acc[country] ?? [];
+      return {
+        ...acc,
+        [country]: [...countryData, stock],
+      };
+    },
+    {},
+  );
 };
 
-export const getStocksWithCountry = async () => {
-  const stocksData = (await db.select().from(stocks)) as never as SelectStock[];
-
-  const stockDataWithCountry = await Promise.all(
-    stocksData.map(async (stock) => {
-      const { id, ...rest } = stock;
-      const country = stock.country ? await findCountry(stock.country) : null;
-
-      return {
-        // need to convert to int because of bigint not being supported by json stringify
-        id: parseInt(id.toString()),
-        ...rest,
-        countryData: country,
-      };
-    }),
+export const getCountryByString = async (countries: string[]) => {
+  const countryResInit = await fetch(
+    `https://restcountries.com/v3.1/all?fields=name,cca2,cca3,capital,translations`,
   );
-  return stockDataWithCountry;
+  const countryDataInit = (await countryResInit.json()) as Country[];
+
+  return countryDataInit;
 };
