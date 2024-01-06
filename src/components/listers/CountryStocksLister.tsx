@@ -24,7 +24,7 @@ export const CountryStocksLister = async () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md">
+    <div className="mx-auto my-4 flex w-full max-w-md flex-wrap gap-4">
       {countryWithStocks.map((entry) => (
         <div
           key={entry.country}
@@ -41,6 +41,12 @@ export const CountryStocksLister = async () => {
                     <div className="flex flex-col">
                       <StockListItemLine title="brand">
                         {s.brand}
+                      </StockListItemLine>
+                      <StockListItemLine title="type">
+                        {s.type}
+                      </StockListItemLine>
+                      <StockListItemLine title="description">
+                        {s.description}
                       </StockListItemLine>
                     </div>
                   </div>
