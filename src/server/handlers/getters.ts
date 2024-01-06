@@ -2,6 +2,9 @@ import { stocks, type SelectStockSanitized } from "@/server/db/schema";
 import { db } from "@/server/db";
 import { type Country } from "@/types/countries";
 
+import { getAlpha3ByAlpha2, getCountryByName } from "country-locale-map";
+import { locale_mapping_common_mismatches } from "../locale.mapping";
+
 export const getStocks = async () => {
   const stocksArray = (await db.select().from(stocks)).flatMap((x) => {
     const { id, ...rest } = x;
@@ -28,11 +31,101 @@ export const getStocks = async () => {
   );
 };
 
-export const getCountryByString = async (countries: string[]) => {
-  const countryResInit = await fetch(
-    `https://restcountries.com/v3.1/all?fields=name,cca2,cca3,capital,translations`,
-  );
-  const countryDataInit = (await countryResInit.json()) as Country[];
+export const getCountriesWithStocks = async () => {
+  const stocks = await getStocks();
+  const countries = Object.keys(stocks);
 
-  return countryDataInit;
+  const countryStock = new Map<string, SelectStockSanitized[]>();
+
+  for (const country of countries) {
+    const stockforCountry = stocks[country]!;
+    const countryMatchFirstRun = await getCountryByString(
+      country,
+      stockforCountry,
+    );
+    if (countryMatchFirstRun) {
+      const [countryName, stocks] = countryMatchFirstRun;
+      if (countryStock.has(countryName)) {
+        const stocksForCountry = countryStock.get(countryName)!;
+        countryStock.set(countryName, [...stocksForCountry, ...stocks]);
+      } else {
+        countryStock.set(countryName, stocks);
+      }
+    }
+  }
+
+  const data = countryStock.entries();
+  const dataArray = Array.from(data);
+
+  return dataArray.map(([country, stocks]) => ({
+    country,
+    stocks,
+  }));
+};
+
+export const getCountryByString = async (
+  country: string,
+  stockObj: SelectStockSanitized[],
+) => {
+  const urlPrefix = "https://restcountries.com/v3.1";
+
+  const incorrectCountryNames = new Set<string>();
+
+  const urlByCountryLength = {
+    1: "/alpha/",
+    2: "/alpha/",
+    3: "/alpha/",
+    default: "/translation/",
+  } as const;
+
+  const countryLength =
+    country.length > 0 && country.length < 4
+      ? (country.length as keyof typeof urlByCountryLength)
+      : ("default" as keyof typeof urlByCountryLength);
+
+  const urlSuffix = urlByCountryLength[countryLength];
+
+  const url = `${urlPrefix}${urlSuffix}${
+    urlSuffix == "/alpha/"
+      ? getAlpha3ByAlpha2(country.toUpperCase()) ??
+        (locale_mapping_common_mismatches[
+          country.toLowerCase() as keyof typeof locale_mapping_common_mismatches
+        ] &&
+          getAlpha3ByAlpha2(
+            locale_mapping_common_mismatches[
+              country as keyof typeof locale_mapping_common_mismatches
+            ],
+          )) ??
+        country.toUpperCase()
+      : country
+  }`;
+
+  const countryDataFirst = await fetch(url);
+  const countryData = (await countryDataFirst.json()) as Country[];
+
+  if (countryData.length > 0) {
+    const cd = countryData.at(0)!;
+    const cca3 = getAlpha3ByAlpha2(cd.cca2.toUpperCase());
+
+    if (cca3) {
+      return [cca3, stockObj] as const;
+    } else {
+      incorrectCountryNames.add(country);
+    }
+  } else {
+    incorrectCountryNames.add(country);
+  }
+
+  if (incorrectCountryNames.size > 0) {
+    const countryName = Array.from(incorrectCountryNames).at(0)!;
+    const countryMatch = getCountryByName(countryName, true);
+
+    if (countryMatch) {
+      return [countryMatch.alpha3.toUpperCase(), stockObj] as const;
+    } else {
+      return ["Other", stockObj] as const;
+    }
+  } else {
+    return [country, stockObj] as const;
+  }
 };

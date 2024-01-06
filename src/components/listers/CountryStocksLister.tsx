@@ -1,6 +1,6 @@
-import { type SelectStockSanitized, stocks } from "@/server/db/schema";
-import { getCountryByString, getStocks } from "@/server/handlers/getters";
-import { TypeOf } from "zod";
+import { type SelectStockSanitized } from "@/server/db/schema";
+import { getCountriesWithStocks } from "@/server/handlers/getters";
+import { getCountryByAlpha3 } from "country-locale-map";
 
 const StockListItemLine = ({
   title,
@@ -10,29 +10,30 @@ const StockListItemLine = ({
   children: React.ReactNode;
 }) => (
   <span className="flex gap-1">
-    <strong>Brand:</strong>
+    <strong>{title}:</strong>
     {children}
   </span>
 );
 
 export const CountryStocksLister = async () => {
-  const stock = await getStocks();
-  const stockKeys = Object.keys(stock);
-  //   const countryByStringMatch = await getCountryByString(stockKeys);
+  const countryWithStocks = await getCountriesWithStocks();
+
+  const getCountryLabelByCCA3 = (country?: string) => {
+    if (!country) return null;
+    return getCountryByAlpha3(country)?.name ?? country;
+  };
 
   return (
     <div className="mx-auto w-full max-w-md">
-      {stockKeys.map((country) => (
-        // section with clickable drawers using summary/details
-
+      {countryWithStocks.map((entry) => (
         <div
-          key={country}
+          key={entry.country}
           className="mx-2 flex w-full max-w-lg flex-col items-center justify-center"
         >
-          {country}
+          {getCountryLabelByCCA3(entry.country)}
           <div className="flex max-w-md flex-row flex-wrap gap-1">
-            {stock[country]
-              ? stock[country]!.flatMap((s) => (
+            {entry.stocks.length > 0
+              ? entry.stocks.flatMap((s) => (
                   <div
                     key={`${s.id}-stockItem-${s.brand}`}
                     className="flex w-auto max-w-full flex-row items-center justify-between gap-4 rounded-lg border px-3 py-2"
