@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 
 import local from "next/font/local";
+import Link from "next/link";
 
 const sofia = local({
   src: "../../public/fonts/Sofia Pro Regular.ttf",
@@ -47,7 +48,20 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={`font-sans ${sofia.className}`}>{children}</body>
+      <body className={`font-sans ${sofia.className}`}>
+        <div className="fixed bottom-0 flex w-auto flex-col items-start justify-start gap-2 pb-4 pl-4">
+          <Link href="/" className="rounded-md border bg-tertiary-1 px-2 py-1">
+            Home
+          </Link>
+          <Link
+            href="/countries"
+            className="rounded-md border bg-tertiary-1 px-2 py-1"
+          >
+            Countries
+          </Link>
+        </div>
+        {children}
+      </body>
     </html>
   );
 }

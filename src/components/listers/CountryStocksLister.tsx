@@ -48,6 +48,9 @@ export const CountryStocksLister = async () => {
                       <StockListItemLine title="description">
                         {s.description}
                       </StockListItemLine>
+                      <StockListItemLine title="location">
+                        {s.location ?? "Unknown"}
+                      </StockListItemLine>
                     </div>
                   </div>
                 ))

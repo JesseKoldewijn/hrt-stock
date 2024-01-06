@@ -63,6 +63,26 @@ export const getCountriesWithStocks = async () => {
   }));
 };
 
+export const getAvaialbleStockCountries = async () => {
+  const stocksCountries = await db
+    .select({
+      country: stocks.country,
+    })
+    .from(stocks)
+    .execute();
+
+  const countries = new Set<string>();
+
+  for (const country of stocksCountries) {
+    if (country.country) {
+      const actualCountry = await getCountryByString(country.country, []);
+      countries.add(actualCountry[0]);
+    }
+  }
+
+  return Array.from(countries);
+};
+
 export const getCountryByString = async (
   country: string,
   stockObj: SelectStockSanitized[],
@@ -123,7 +143,7 @@ export const getCountryByString = async (
     if (countryMatch) {
       return [countryMatch.alpha3.toUpperCase(), stockObj] as const;
     } else {
-      return ["Other", stockObj] as const;
+      return ["Unknown", stockObj] as const;
     }
   } else {
     return [country, stockObj] as const;
