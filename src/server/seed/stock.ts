@@ -4,7 +4,6 @@ import dotEnv from "dotenv";
 import { createConnection } from "mysql2/promise";
 import { stocks } from "../db/schema.ts";
 import { type Stock } from "@/types/stocks.ts";
-import { collectionMatchByString } from "@/utils/matchers.ts";
 
 dotEnv.config();
 
