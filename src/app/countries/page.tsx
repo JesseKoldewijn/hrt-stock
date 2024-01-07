@@ -1,4 +1,5 @@
 import { getAvaialbleStockCountries } from "@/server/handlers/getters";
+import { slugify } from "@/utils/slugify";
 import { getCountryByAlpha3 } from "country-locale-map";
 import Link from "next/link";
 
@@ -12,12 +13,9 @@ const CountriesPage = async () => {
 
     return (
       <Link
-        href={`/countries/${
-          // replace all whitespace with dashes
-          countryDetails?.name
-            ? countryDetails.name.toLowerCase().replaceAll(/\s+/g, "-")
-            : country
-        }`}
+        href={`/countries/${slugify(
+          countryDetails?.alpha3 ? countryDetails.alpha3 : country,
+        )}`}
         className="flex rounded-md border bg-tertiary-1 px-2 py-1 font-medium"
       >
         {countryDetails?.name ? countryDetails.name : country}
@@ -30,7 +28,7 @@ const CountriesPage = async () => {
       <h1>Countries</h1>
       <div className="mx-auto flex max-w-md flex-row flex-wrap gap-2">
         {countries.flatMap((x) => (
-          <CountryListEntry country={x} />
+          <CountryListEntry key={x} country={x} />
         ))}
       </div>
     </div>

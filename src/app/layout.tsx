@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 
 import local from "next/font/local";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const sofia = local({
   src: "../../public/fonts/Sofia Pro Regular.ttf",

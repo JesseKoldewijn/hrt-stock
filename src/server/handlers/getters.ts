@@ -4,6 +4,7 @@ import { type Country } from "@/types/countries";
 
 import { getAlpha3ByAlpha2, getCountryByName } from "country-locale-map";
 import { locale_mapping_common_mismatches } from "../locale.mapping";
+import { count } from "console";
 
 export const getStocks = async () => {
   const stocksArray = (await db.select().from(stocks)).flatMap((x) => {
@@ -31,18 +32,18 @@ export const getStocks = async () => {
   );
 };
 
-export const getCountriesWithStocks = async () => {
+export const getCountriesWithStocks = async (specificCountry?: string) => {
   const stocks = await getStocks();
   const countries = Object.keys(stocks);
 
   const countryStock = new Map<string, SelectStockSanitized[]>();
 
   for (const country of countries) {
-    const stockforCountry = stocks[country]!;
-    const countryMatchFirstRun = await getCountryByString(
-      country,
-      stockforCountry,
-    );
+    const cty = specificCountry ?? country;
+
+    const stockforCountry = stocks[cty]!;
+    const countryMatchFirstRun = await getCountryByString(cty, stockforCountry);
+
     if (countryMatchFirstRun) {
       const [countryName, stocks] = countryMatchFirstRun;
       if (countryStock.has(countryName)) {
@@ -51,6 +52,9 @@ export const getCountriesWithStocks = async () => {
       } else {
         countryStock.set(countryName, stocks);
       }
+    }
+    if (specificCountry && countryStock.size > 0) {
+      break;
     }
   }
 
