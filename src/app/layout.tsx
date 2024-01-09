@@ -49,14 +49,14 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={`font-sans ${sofia.className}`}>
+      <body className={`font-sans ${sofia.className} bg-tertiary-1-200`}>
         <div className="fixed bottom-0 flex w-auto flex-col items-start justify-start gap-2 pb-4 pl-4">
-          <Link href="/" className="rounded-md border bg-tertiary-1 px-2 py-1">
+          <Link href="/" className="rounded-md bg-primary-500 px-2 py-1">
             Home
           </Link>
           <Link
             href="/countries"
-            className="rounded-md border bg-tertiary-1 px-2 py-1"
+            className="rounded-md bg-primary-500 px-2 py-1"
           >
             Countries
           </Link>

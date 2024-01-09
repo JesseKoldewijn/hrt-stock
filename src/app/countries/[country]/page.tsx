@@ -1,11 +1,10 @@
+import Button from "@/components/ui/Button";
 import {
   getAvaialbleStockCountries,
   getCountriesWithStocks,
 } from "@/server/handlers/getters";
-import { unslugify } from "@/utils/slugify";
 import { capitalize } from "@/utils/typography";
-import { getCountryByAlpha3, getCountryByName } from "country-locale-map";
-import { EyeIcon } from "lucide-react";
+import { getCountryByAlpha3 } from "country-locale-map";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -43,10 +42,10 @@ const CountryPage = async ({ params }: CountryPageProps) => {
       <span>CountryPage: {countryDetails?.name}</span>
       <div className="flex w-full max-w-lg flex-col justify-center gap-2 px-2 pt-2 sm:mx-auto sm:flex-row sm:flex-wrap">
         {countryStock?.stocks ? (
-          countryStock.stocks?.flatMap((x) => (
+          countryStock.stocks?.flatMap((x, i) => (
             <div
               key={x.id}
-              className="flex w-full flex-col gap-1 rounded-md border bg-tertiary-1 px-2 py-1 sm:w-auto"
+              className="border-secundary-100 flex w-full flex-col gap-1 rounded-md border bg-tertiary-1-100 px-2 py-1 sm:w-auto"
             >
               <div className="flex gap-1">
                 <span className="font-medium">Brand:</span>
@@ -61,15 +60,28 @@ const CountryPage = async ({ params }: CountryPageProps) => {
                 <span>{x.description}</span>
               </div>
 
-              <Link
-                href={`/countries/${country}/stock`}
-                className="border-tertiary-2-800 relative my-1 flex items-center justify-center gap-2 rounded-md border bg-primary px-2 py-1"
+              <Button
+                size="sm"
+                variant={
+                  i == 0
+                    ? "primary"
+                    : i == 1
+                      ? "secondary"
+                      : i == 2
+                        ? "tertiary"
+                        : "destructive"
+                }
+                useArrow={
+                  i == 0 ? "left" : i == 1 ? "right" : i == 2 ? "left" : "right"
+                }
+                layouts="textIcon"
               >
-                <EyeIcon id="icon" className="sm:hidden" />
-                <span id="text" className="font-medium">
-                  View Stock
-                </span>
-              </Link>
+                <Link href={`/countries/${country}/stock`}>
+                  <span id="text" className="font-medium">
+                    View Stock
+                  </span>
+                </Link>
+              </Button>
             </div>
           ))
         ) : (

@@ -26,7 +26,7 @@ const config = {
         900: "#3A7E70",
         950: "#316B5F",
       },
-      secundary: {
+      secondary: {
         DEFAULT: "#161616",
         50: "#727272",
         100: "#686868",

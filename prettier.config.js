@@ -6,6 +6,9 @@ const config = {
   useTabs: false,
   semi: true,
   singleQuote: false,
+
+  // TailwindCSS
+  tailwindFunctions: ["cn", "cva"],
 };
 
 export default config;
