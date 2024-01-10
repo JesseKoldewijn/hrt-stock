@@ -8,8 +8,15 @@ await import("./src/env.js");
 const config = {
   compress: true,
   reactStrictMode: true,
-  experimental: {
-    ppr: true,
+  poweredByHeader: false,
+  productionBrowserSourceMaps: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "flagcdn.com",
+      },
+    ],
   },
 };
 

@@ -76,7 +76,7 @@ const CountryPage = async ({ params }: CountryPageProps) => {
                 }
                 layouts="textIcon"
               >
-                <Link href={`/countries/${country}/stock`}>
+                <Link href={`/countries/${country}/stock/${x.id}`}>
                   <span id="text" className="font-medium">
                     View Stock
                   </span>

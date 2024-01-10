@@ -20,17 +20,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Icon = () => {
       switch (useArrow) {
         case "left":
-          return (
-            <span className="text-lg">
-              <FaArrowLeft />
-            </span>
-          );
+          return <FaArrowLeft />;
         case "right":
-          return (
-            <span className="text-lg">
-              <FaArrowRight />
-            </span>
-          );
+          return <FaArrowRight />;
         default:
           return <>{icon}</>;
       }
