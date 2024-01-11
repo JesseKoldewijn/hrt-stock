@@ -1,4 +1,4 @@
-import Button from "@/components/ui/Button";
+import { LinkButton } from "@/components/ui/Button";
 import {
   getAvaialbleStockCountries,
   getCountriesWithStocks,
@@ -60,8 +60,9 @@ const CountryPage = async ({ params }: CountryPageProps) => {
                 <span>{x.description}</span>
               </div>
 
-              <Button
+              <LinkButton
                 size="sm"
+                href={`/countries/${country}/stock/${x.id}`}
                 variant={
                   i == 0
                     ? "primary"
@@ -71,17 +72,13 @@ const CountryPage = async ({ params }: CountryPageProps) => {
                         ? "tertiary"
                         : "destructive"
                 }
-                useArrow={
-                  i == 0 ? "left" : i == 1 ? "right" : i == 2 ? "left" : "right"
-                }
-                layouts="textIcon"
+                layout={i == 0 ? "iconText" : "textIcon"}
+                useArrow
               >
-                <Link href={`/countries/${country}/stock/${x.id}`}>
-                  <span id="text" className="font-medium">
-                    View Stock
-                  </span>
-                </Link>
-              </Button>
+                <span id="text" className="font-medium">
+                  View Stock
+                </span>
+              </LinkButton>
             </div>
           ))
         ) : (

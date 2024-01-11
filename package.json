@@ -21,7 +21,7 @@
     "country-locale-map": "^1.9.0",
     "drizzle-orm": "^0.27.2",
     "mysql2": "^3.7.0",
-    "next": "14.0.5-canary.41",
+    "next": "14.0.5-canary.52",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.12.0",

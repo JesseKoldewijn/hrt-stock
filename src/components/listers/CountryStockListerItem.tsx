@@ -1,5 +1,3 @@
-"use client";
-
 import { type SelectStockSanitized } from "@/server/db/schema";
 
 type CountryStockListerItemProps = {
