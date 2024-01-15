@@ -1,7 +1,7 @@
 import StockItem from "@/components/stock/StockItem";
 import { db } from "@/server/db";
 import { type SelectStockSanitized, stocks } from "@/server/db/schema";
-import { Country } from "@/types/countries";
+import { type Country } from "@/types/countries";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";

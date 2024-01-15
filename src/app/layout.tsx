@@ -49,19 +49,15 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={`font-sans ${sofia.className} bg-tertiary-1-200`}>
-        <div className="fixed bottom-0 flex w-auto flex-col items-start justify-start gap-2 pb-4 pl-4">
-          <Link href="/" className="rounded-md bg-primary-500 px-2 py-1">
-            Home
-          </Link>
-          <Link
-            href="/countries"
-            className="rounded-md bg-primary-500 px-2 py-1"
-          >
-            Countries
-          </Link>
+      <body
+        className={`font-sans ${sofia.className} fixed inset-0 flex flex-col items-center justify-center bg-tertiary-2-400`}
+      >
+        <div className="flex w-full flex-col items-center justify-center gap-4">
+          <h1 className="text-2xl font-semibold">HRT Stock</h1>
+          <div className="mx-8 flex w-auto max-w-xl flex-col items-center justify-center rounded-lg border-2 border-secondary-300 bg-tertiary-1-400 px-2 py-8 shadow-2xl sm:m-auto sm:w-full">
+            {children}
+          </div>
         </div>
-        {children}
       </body>
     </html>
   );

@@ -24,11 +24,11 @@ const CountriesPage = async () => {
   };
 
   return (
-    <div>
-      <h1>Countries</h1>
-      <div className="mx-auto flex max-w-md flex-row flex-wrap gap-2">
-        {countries.flatMap((x) => (
-          <CountryListEntry key={x} country={x} />
+    <div className="flex flex-col items-center justify-center gap-4">
+      <h2 className="text-lg font-medium">Countries</h2>
+      <div className="mx-auto flex max-w-lg flex-col flex-wrap gap-2 md:flex-row">
+        {countries.flatMap((x, i) => (
+          <CountryListEntry key={`${x}-${i}`} country={x} />
         ))}
       </div>
     </div>
