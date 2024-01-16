@@ -1,12 +1,12 @@
+import { getCountryByAlpha3 } from "country-locale-map";
+import React, { Suspense } from "react";
+import { notFound } from "next/navigation";
 import { LinkButton } from "@/components/ui/Button";
 import {
   getAvaialbleStockCountries,
   getCountriesWithStocks,
 } from "@/server/handlers/getters";
 import { capitalize } from "@/utils/typography";
-import { getCountryByAlpha3 } from "country-locale-map";
-import { notFound } from "next/navigation";
-import React, { Suspense } from "react";
 
 export const revalidate = 86400; // 24 hours
 
@@ -38,9 +38,11 @@ const CountryPage = async ({ params }: CountryPageProps) => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h2 className="text-xl font-medium">Country: {countryDetails?.name}</h2>
+      <h2 className="mb-2 text-xl font-medium">
+        Country: {countryDetails?.name}
+      </h2>
       <Suspense>
-        <div className="flex w-full max-w-lg flex-wrap justify-center gap-2 px-2 pt-2 sm:mx-auto sm:flex-row sm:flex-wrap sm:justify-between">
+        <div className="flex max-h-[60vh] w-full max-w-lg flex-wrap justify-center gap-2 overflow-y-auto overflow-x-hidden px-2 pt-2 sm:mx-auto sm:flex-row sm:flex-wrap sm:justify-stretch md:max-h-[80vh]">
           {countryStock?.stocks ? (
             countryStock.stocks?.flatMap((x) => (
               <div

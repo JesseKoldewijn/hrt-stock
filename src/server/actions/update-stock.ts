@@ -1,13 +1,9 @@
-"use server";
-
-import "server-only";
-
-import { stocks, type SelectStockSanitized } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 import z from "zod";
-import { getCountryByString } from "../handlers/getters";
+import { stocks, type SelectStockSanitized } from "@/server/db/schema";
 import { type Country } from "@/types/countries";
 import { db } from "../db";
-import { eq } from "drizzle-orm";
+import { getCountryByString } from "../handlers/getters";
 
 export const updateStock = async (id: number, stock: SelectStockSanitized) => {
   const {

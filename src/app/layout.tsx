@@ -1,9 +1,10 @@
-import "@/styles/globals.css";
 import { type Metadata } from "next";
-
+import { Suspense } from "react";
 import local from "next/font/local";
 import Link from "next/link";
-import { Suspense } from "react";
+import DesktopNavbar from "@/components/navigation/navbar/desktop";
+import MobileNavbar from "@/components/navigation/navbar/mobile";
+import "@/styles/globals.css";
 
 const sofia = local({
   src: "../../public/fonts/Sofia Pro Regular.ttf",
@@ -50,14 +51,16 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
-        className={`font-sans ${sofia.className} fixed inset-0 flex flex-col items-center justify-center bg-tertiary-2-400`}
+        className={`font-sans ${sofia.className} fixed inset-0 flex flex-col justify-center bg-tertiary-2-400`}
       >
-        <div className="flex w-full flex-col items-center justify-center gap-4">
-          <h1 className="text-2xl font-semibold">HRT Stock</h1>
-          <div className="mx-8 flex w-auto max-w-xl flex-col items-center justify-center rounded-lg border-2 border-secondary-300 bg-tertiary-1-400 px-2 py-8 shadow-2xl sm:m-auto sm:w-full">
+        <DesktopNavbar />
+        <div className="flex w-full flex-col justify-center gap-4">
+          <h1 className="text-center text-2xl font-semibold">HRT Stock</h1>
+          <div className="mx-8 flex w-auto max-w-xl flex-col justify-center rounded-lg border-2 border-secondary-300 bg-tertiary-1-400 px-2 py-8 shadow-2xl sm:m-auto sm:w-full">
             {children}
           </div>
         </div>
+        <MobileNavbar />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
-/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} */
+/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions & import('@trivago/prettier-plugin-sort-imports').PrettierConfig} */
 const config = {
-  plugins: ["prettier-plugin-tailwindcss"],
+  plugins: ["@trivago/prettier-plugin-sort-imports","prettier-plugin-tailwindcss"],
   printWidth: 80,
   tabWidth: 2,
   useTabs: false,
@@ -9,6 +9,9 @@ const config = {
 
   // TailwindCSS
   tailwindFunctions: ["cn", "cva"],
+
+  // Sort Imports
+  importOrder: ["^@react/(.*)$", "^react/(.*)$","^@next/(.*)$", "^next/(.*)$", "^@/(.*)$", "^[./]"],
 };
 
 export default config;
