@@ -1,7 +1,5 @@
 import { type Metadata } from "next";
-import { Suspense } from "react";
 import local from "next/font/local";
-import Link from "next/link";
 import DesktopNavbar from "@/components/navigation/navbar/desktop";
 import MobileNavbar from "@/components/navigation/navbar/mobile";
 import "@/styles/globals.css";

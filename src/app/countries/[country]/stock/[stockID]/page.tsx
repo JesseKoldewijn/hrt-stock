@@ -8,8 +8,6 @@ import { type SelectStockSanitized, stocks } from "@/server/db/schema";
 import { type Country } from "@/types/countries";
 import { cn } from "@/utils/cn";
 
-export const revalidate = 86400; // 24 hours
-
 type CountryStockPageProps = {
   params: {
     country: string;
@@ -47,7 +45,7 @@ const CountryStockPage = async ({
   );
 
   if (!ctRes.ok) {
-    throw new Error(ctRes.statusText);
+    notFound();
   }
 
   const ctData = (await ctRes.json()) as Country[];
@@ -123,7 +121,7 @@ const CountryStockPage = async ({
       </div>
       <div className="mx-auto flex flex-row gap-8">
         <LinkButton
-          href={`/countries/${stockTotal.country.cca3.toLowerCase()}/stock`}
+          href={`/countries/${stockTotal.country.cca3.toLowerCase()}`}
           variant="tertiary"
           size="default"
           layout="iconText"

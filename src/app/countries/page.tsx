@@ -5,6 +5,7 @@ import { getAvaialbleStockCountries } from "@/server/handlers/getters";
 import { slugify } from "@/utils/slugify";
 
 export const revalidate = 86400; // 24 hours
+export const dynamic = "force-dynamic";
 
 const CountriesPage = async () => {
   const countries = await getAvaialbleStockCountries();
