@@ -1,4 +1,5 @@
 import { getCountryByAlpha3 } from "country-locale-map";
+import { Suspense } from "react";
 import Link from "next/link";
 import { getAvaialbleStockCountries } from "@/server/handlers/getters";
 import { slugify } from "@/utils/slugify";
@@ -26,11 +27,13 @@ const CountriesPage = async () => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <h2 className="text-lg font-medium">Countries</h2>
-      <div className="flex flex-col flex-wrap gap-2 md:flex-row">
-        {countries.flatMap((x, i) => (
-          <CountryListEntry key={`${x}-${i}`} country={x} />
-        ))}
-      </div>
+      <Suspense>
+        <div className="flex flex-col flex-wrap gap-2 md:flex-row">
+          {countries.flatMap((x, i) => (
+            <CountryListEntry key={`${x}-${i}`} country={x} />
+          ))}
+        </div>
+      </Suspense>
     </div>
   );
 };
