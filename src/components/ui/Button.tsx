@@ -1,9 +1,8 @@
-import React from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/cn";
+import React from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
+import { cn } from "@/utils/cn";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -29,9 +28,9 @@ const ButtonElem = (
   const Icon = () => {
     switch (layout) {
       case "iconText":
-        return <FaArrowLeft />;
+        return <>{useArrow ? <FaArrowLeft /> : icon}</>;
       case "textIcon":
-        return <FaArrowRight />;
+        return <>{useArrow ? <FaArrowRight /> : icon}</>;
       default:
         return <>{icon}</>;
     }

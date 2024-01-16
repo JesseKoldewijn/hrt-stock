@@ -27,7 +27,7 @@ const CountryStockPage = async ({
     .from(stocks)
     .where(eq(stocks.id, BigInt(stockID)));
 
-  if (!stock || stock.length === 0) {
+  if (!stock || stock.length < 1) {
     notFound();
   }
 

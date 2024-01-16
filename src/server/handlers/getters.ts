@@ -1,10 +1,8 @@
-import { stocks, type SelectStockSanitized } from "@/server/db/schema";
-import { db } from "@/server/db";
-import { type Country } from "@/types/countries";
-
 import { getAlpha3ByAlpha2, getCountryByName } from "country-locale-map";
+import { db } from "@/server/db";
+import { stocks, type SelectStockSanitized } from "@/server/db/schema";
+import { type Country } from "@/types/countries";
 import { locale_mapping_common_mismatches } from "../locale.mapping";
-import { count } from "console";
 
 export const getStocks = async () => {
   const stocksArray = (await db.select().from(stocks)).flatMap((x) => {
