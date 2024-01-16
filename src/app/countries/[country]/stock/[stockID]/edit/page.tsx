@@ -1,10 +1,9 @@
 import { eq } from "drizzle-orm";
-import React from "react";
 import { notFound } from "next/navigation";
 import { db } from "@/server/db";
 import { stocks } from "@/server/db/schema";
 import { getCountryByString } from "@/server/handlers/getters";
-import { Country } from "@/types/countries";
+import { type Country } from "@/types/countries";
 import EditStockForm from "./edit-form";
 
 export const revalidate = 86400; // 24 hours
