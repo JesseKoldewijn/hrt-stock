@@ -41,7 +41,7 @@ const CountryStockEditPage = async ({
   const [CountryCode] = await getCountryByString(country, [sanitizedStock]);
 
   const countryDetails = await fetch(
-    `https://restcountries.com/v3.1/alpha/${CountryCode.toLowerCase()}?fields=name,translations,cca3`,
+    `https://restcountries.com/v3.1/alpha/${CountryCode.toLowerCase()}?fields=name,translations,cca3,flags`,
     {
       method: "GET",
       headers: {
@@ -51,7 +51,7 @@ const CountryStockEditPage = async ({
   ).then(async (x) => (await x.json()) as Country);
 
   const allCountryNamesAndCodes = await fetch(
-    "https://restcountries.com/v3.1/all?fields=name,translations,cca3",
+    "https://restcountries.com/v3.1/all?fields=name,translations,cca3,flags",
     {
       method: "GET",
       headers: {

@@ -42,21 +42,25 @@ const ButtonElem = (
       ref={ref}
       {...rest}
     >
-      {layout === "iconText" && !icon ? (
-        <span className="flex items-center justify-center">
-          <Icon />
-        </span>
-      ) : (
-        <span className="flex items-center justify-center">{icon}</span>
-      )}
+      {layout === "iconText" ? (
+        !icon ? (
+          <span className="flex items-center justify-center">
+            <Icon />
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">{icon}</span>
+        )
+      ) : null}
       {children}
-      {layout === "textIcon" && !icon ? (
-        <span className="flex items-center justify-center">
-          <Icon />
-        </span>
-      ) : (
-        <span className="flex items-center justify-center">{icon}</span>
-      )}
+      {layout === "textIcon" ? (
+        !icon ? (
+          <span className="flex items-center justify-center">
+            <Icon />
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">{icon}</span>
+        )
+      ) : null}
     </button>
   );
 };
@@ -97,17 +101,25 @@ const LinkButtonElem = (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(rest as any)}
     >
-      {layout === "iconText" && (
-        <span className="flex items-center justify-center">
-          <Icon />
-        </span>
-      )}
+      {layout === "iconText" ? (
+        !icon ? (
+          <span className="flex items-center justify-center">
+            <Icon />
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">{icon}</span>
+        )
+      ) : null}
       {children}
-      {layout === "textIcon" && (
-        <span className="flex items-center justify-center">
-          <Icon />
-        </span>
-      )}
+      {layout === "textIcon" ? (
+        !icon ? (
+          <span className="flex items-center justify-center">
+            <Icon />
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">{icon}</span>
+        )
+      ) : null}
     </Link>
   );
 };

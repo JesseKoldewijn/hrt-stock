@@ -49,7 +49,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
-        className={`font-sans ${sofia.className} fixed inset-0 flex flex-col justify-center bg-tertiary-2-400`}
+        className={`font-sans ${sofia.className} fixed inset-0 !right-0 flex flex-col justify-center bg-tertiary-2-400`}
       >
         <DesktopNavbar />
         <div className="flex w-full flex-col justify-center gap-4">
