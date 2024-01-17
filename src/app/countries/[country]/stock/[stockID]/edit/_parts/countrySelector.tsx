@@ -35,7 +35,7 @@ const CountrySelector = ({
   };
 
   const handleCountryClick = (
-    e: MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
     country: Country,
   ) => {
     e.preventDefault();
