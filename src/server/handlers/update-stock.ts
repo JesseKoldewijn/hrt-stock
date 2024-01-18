@@ -5,15 +5,16 @@ import { type Country } from "@/types/countries";
 import { db } from "../db";
 import { getCountryByString } from "../handlers/getters";
 
-export const updateStock = async (id: number, stock: SelectStockSanitized) => {
+export const updateStock = async (stockObject: SelectStockSanitized) => {
   const {
+    id,
     country,
     brand,
     type,
     description,
     stock: quantity,
     location,
-  } = stock;
+  } = stockObject;
 
   const zodValidate = z.object({
     id: z.number(),
@@ -25,13 +26,22 @@ export const updateStock = async (id: number, stock: SelectStockSanitized) => {
     location: z.string(),
   });
 
+  const qty = parseInt(String(quantity));
+
+  if (isNaN(qty)) {
+    return {
+      error: "Stock must be a number",
+      success: false,
+    };
+  }
+
   const stockData = await zodValidate.safeParseAsync({
     id,
     country,
     brand,
     type,
     description,
-    stock: quantity,
+    stock: qty,
     location,
   });
 
@@ -70,10 +80,19 @@ export const updateStock = async (id: number, stock: SelectStockSanitized) => {
     };
   }
 
-  const countryData = (await countryDataRes.json()) as Country;
+  const countryData = (await countryDataRes.json()) as Country[];
+
+  if (!countryData ?? countryData.length < 1) {
+    return {
+      error: "Country not found",
+      success: false,
+    };
+  }
+
+  const cd = countryData.at(0)!;
 
   const newCountryData = {
-    country: countryData.name.common,
+    country: cd.name.common.toLowerCase(),
     brand: stockData.data.brand,
     type: stockData.data.type,
     description: stockData.data.description,
@@ -88,6 +107,12 @@ export const updateStock = async (id: number, stock: SelectStockSanitized) => {
       .set(newCountryData)
       .where(eq(stocks.id, BigInt(stockData.data.id)))
       .execute();
+
+    return {
+      success: true,
+      message: "Stock updated",
+      data: stockData.data,
+    };
   } catch (e) {
     const error = e as Error;
     return {

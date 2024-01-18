@@ -71,7 +71,7 @@ const CountryStockPage = async ({
             <div className="mx-auto flex gap-2 pt-3">
               <span
                 className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-full p-2 font-medium text-tertiary-1-50",
+                  "flex h-7 w-7 items-center justify-center rounded-full p-2 text-sm font-medium text-tertiary-1-50",
                   stockTotal.stock.stock && stockTotal.stock.stock > 0
                     ? stockTotal.stock.stock > stockMin
                       ? "bg-system-success-600"

@@ -13,13 +13,16 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { type Country } from "@/types/countries";
+import { cn } from "@/utils/cn";
 
 const CountrySelector = ({
   availableCountries,
-  countryInputRef,
+  currentCountry,
+  setCountry,
 }: {
   availableCountries: Country[];
-  countryInputRef: React.RefObject<HTMLInputElement>;
+  currentCountry: Country;
+  setCountry: React.Dispatch<React.SetStateAction<Country>>;
 }) => {
   const [filteredCountries, setFilteredCountries] =
     useState<Country[]>(availableCountries);
@@ -39,7 +42,7 @@ const CountrySelector = ({
     country: Country,
   ) => {
     e.preventDefault();
-    console.log(country.cca3);
+    setCountry(country);
   };
 
   return (
@@ -93,10 +96,14 @@ const CountrySelector = ({
           className="mx-4 flex max-h-[60vh] max-w-md flex-row flex-wrap justify-stretch gap-1 overflow-y-auto md:mx-2 md:max-h-60 md:max-w-full"
         >
           {(filteredCountries ?? availableCountries).map((country) => {
+            const isSelected = currentCountry.cca3 == country.cca3;
             return (
               <Button
                 key={country.cca3}
-                className="flex w-full max-w-full items-center justify-center gap-2 rounded-none p-2 md:max-w-[180px]"
+                className={cn(
+                  isSelected && "border-system-success-600",
+                  "flex w-full max-w-full items-center justify-center gap-2 rounded-none p-2 md:max-w-[180px]",
+                )}
                 variant="secondary"
                 layout="iconText"
                 onClick={(e) => {
