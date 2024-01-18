@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/drawer";
 import { type Country } from "@/types/countries";
 import { cn } from "@/utils/cn";
+import { countrySearch } from "@/utils/countrySearch";
 
 const CountrySelector = ({
   availableCountries,
@@ -30,11 +31,8 @@ const CountrySelector = ({
   const handleSearchInput = (e: FormEvent<HTMLInputElement>) => {
     const input = e.currentTarget.value;
 
-    setFilteredCountries(
-      availableCountries.filter((country) =>
-        country.name.common.toLowerCase().includes(input.toLowerCase()),
-      ),
-    );
+    const searchResult = countrySearch(input, availableCountries);
+    setFilteredCountries(searchResult);
   };
 
   const handleCountryClick = (
@@ -80,7 +78,7 @@ const CountrySelector = ({
                 <input
                   id="country-search"
                   name="country-search"
-                  type="text"
+                  type="search"
                   className="w-full max-w-xs rounded-md border p-1"
                   placeholder="Search for a country"
                   onChange={handleSearchInput}

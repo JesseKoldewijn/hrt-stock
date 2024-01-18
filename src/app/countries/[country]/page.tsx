@@ -37,17 +37,19 @@ const CountryPage = async ({ params }: CountryPageProps) => {
     return notFound();
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h2 className="mb-2 text-xl font-medium">
-        Country: {countryDetails?.name}
-      </h2>
+    <div className="flex flex-col items-center justify-center gap-4">
+      <div className="mx-auto flex w-full max-w-lg flex-col items-center justify-center gap-4 px-2 pb-2 md:flex-row md:pr-7">
+        <h2 className="w-auto text-xl font-medium">
+          Country: {countryDetails?.name}
+        </h2>
+      </div>
       <Suspense>
-        <div className="flex max-h-[60vh] w-full max-w-lg flex-wrap justify-center gap-2 overflow-y-auto overflow-x-hidden px-2 pt-2 sm:mx-auto sm:flex-row sm:flex-wrap sm:justify-stretch md:max-h-[80vh]">
+        <div className="mx-auto flex max-h-[45vh] w-full max-w-lg flex-wrap justify-center gap-2 overflow-y-auto overflow-x-hidden px-2 sm:mx-auto sm:flex-row sm:flex-wrap sm:justify-stretch md:max-h-[80vh]">
           {countryStock?.stocks ? (
             countryStock.stocks?.flatMap((x) => (
               <div
                 key={x.id}
-                className="border-secundary-100 flex w-full flex-col gap-1 rounded-md border bg-tertiary-1-100 px-2 py-2 sm:w-auto md:w-auto "
+                className="border-secundary-100 flex w-full flex-col gap-1 rounded-md border bg-tertiary-1-100 px-2 py-2 sm:w-auto md:w-auto"
               >
                 <div className="flex gap-1">
                   <span className="font-medium">Brand:</span>
