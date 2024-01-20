@@ -3,6 +3,7 @@
 import React, { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { Button, LinkButton } from "@/components/ui/Button";
+import { TextInput } from "@/components/ui/Input";
 import { type SelectStockSanitized } from "@/server/db/schema";
 import { type Country } from "@/types/countries";
 import { cn } from "@/utils/cn";
@@ -143,7 +144,7 @@ const EditStockForm = ({
                 <label htmlFor={name} className="w-full max-w-20 text-ellipsis">
                   {name}
                 </label>
-                <input
+                <TextInput
                   id={name}
                   name={`stock-${name}`}
                   type={isNumberInput ? "number" : "text"}

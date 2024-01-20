@@ -3,6 +3,7 @@
 import { getCountryByAlpha3 } from "country-locale-map";
 import { type ChangeEvent, useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
+import { TextInput } from "@/components/ui/Input";
 import { type Country } from "@/types/countries";
 import { countrySearch } from "@/utils/countrySearch";
 import { slugify } from "@/utils/slugify";
@@ -61,18 +62,20 @@ const FilteredCountryList = ({
   return (
     <div className="flex w-full flex-col gap-8">
       <div>
-        <div className="mx-auto flex w-full justify-between px-6 pb-4">
-          <h2 className="text-lg font-medium">Countries</h2>
-          <input
+        <div className="mx-auto flex w-full flex-col justify-between gap-2 px-6 pb-4 sm:flex-row">
+          <h2 className="text-center text-lg font-medium sm:text-left">
+            Countries
+          </h2>
+          <TextInput
             type="search"
             placeholder="Search for country"
             onChange={handleFilterChange}
-            className="w-full max-w-[80%] rounded-md border p-1 md:max-w-[160px]"
+            className="w-full rounded-md border p-1 sm:max-w-[160px]"
           />
         </div>
       </div>
 
-      <div className="mx-auto flex max-h-[40vh] max-w-md flex-col flex-wrap items-center justify-stretch gap-2 overflow-y-auto px-4 md:flex-row">
+      <div className="mx-auto flex max-h-[40vh] w-full max-w-md flex-col flex-wrap items-center justify-stretch gap-2 overflow-y-auto px-4 md:flex-row">
         {filteredCountries.flatMap((x, i) => (
           <CountryListEntry key={`${x}-${i}`} country={x} />
         ))}
