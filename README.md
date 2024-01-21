@@ -1,10 +1,19 @@
 <h1 align="center">Welcome to HRT-Stock 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <img alt="GitHub package.json version (branch)" src="https://img.shields.io/github/package-json/v/JesseKoldewijn/hrt-stock/main">
+  <img alt="GitHub package.json version (branch)" src="https://img.shields.io/github/package-json/v/JesseKoldewijn/hrt-stock/main?label=version">
 </p>
 
 > A stock overview & management tool build using my some of my favorite tools.
+
+## Prerequisites
+
+- node.js >= 18.x
+- pnpm >= 6.x
+
+You'll also need a mySQL database and a vercel account. The vercel account is needed for the kv database.
+
+- KV database is used to cache country fetch responses to prevent socket timeouts.
+- mySQL database is used to store the stock data.
 
 ## Install
 
