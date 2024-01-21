@@ -15,6 +15,8 @@ type CountryStockPageProps = {
   };
 };
 
+export const revalidate = 172800000; // 2 days in miliseconds
+
 const CountryStockPage = async ({
   params: { country, stockID },
 }: CountryStockPageProps) => {

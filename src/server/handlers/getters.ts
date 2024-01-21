@@ -1,3 +1,5 @@
+import { kv } from "@vercel/kv";
+import axios from "axios";
 import { getAlpha3ByAlpha2, getCountryByName } from "country-locale-map";
 import { db } from "@/server/db";
 import { stocks, type SelectStockSanitized } from "@/server/db/schema";
@@ -77,8 +79,17 @@ export const getAvaialbleStockCountries = async () => {
 
   for (const country of stocksCountries) {
     if (country.country) {
+      const cachedResult = (await kv.get(`${country.country}-country`)) as
+        | string
+        | undefined;
+
+      if (cachedResult) {
+        countries.add(cachedResult);
+        continue;
+      }
       const actualCountry = await getCountryByString(country.country, []);
       countries.add(actualCountry[0]);
+      await kv.set(`${country.country}-country`, actualCountry[0]);
     }
   }
 
@@ -107,6 +118,11 @@ export const getCountryByString = async (
 
   const urlSuffix = urlByCountryLength[countryLength];
 
+  const countryNameFuzzy = getCountryByName(country, true);
+  const countryName = countryNameFuzzy
+    ? countryNameFuzzy.name
+    : country.toUpperCase();
+
   const url = `${urlPrefix}${urlSuffix}${
     urlSuffix == "/alpha/"
       ? getAlpha3ByAlpha2(country.toUpperCase()) ??
@@ -118,36 +134,58 @@ export const getCountryByString = async (
               country as keyof typeof locale_mapping_common_mismatches
             ],
           )) ??
-        country.toUpperCase()
-      : country
+        country
+      : countryName
   }`;
 
-  const countryDataFirst = await fetch(url);
-  const countryData = (await countryDataFirst.json()) as Country[];
+  const cachedCountry = await kv.get<Country[]>(url);
 
-  if (countryData.length > 0) {
-    const cd = countryData.at(0)!;
-    const cca3 = getAlpha3ByAlpha2(cd.cca2.toUpperCase());
+  if (cachedCountry) {
+    const cd = cachedCountry.at(0)!;
+    return [cd.cca3, stockObj] as const;
+  }
 
-    if (cca3) {
-      return [cca3, stockObj] as const;
+  try {
+    const countryDataFirst =
+      country !== "unknown"
+        ? await axios.get(url, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+        : { data: [] };
+    const countryData = countryDataFirst.data as Country[];
+
+    if (countryData.length > 0) {
+      const cd = countryData.at(0)!;
+      const cca3 = getAlpha3ByAlpha2(cd.cca2.toUpperCase());
+
+      if (cca3) {
+        return [cca3, stockObj] as const;
+      } else {
+        incorrectCountryNames.add(country);
+      }
     } else {
       incorrectCountryNames.add(country);
     }
-  } else {
-    incorrectCountryNames.add(country);
-  }
 
-  if (incorrectCountryNames.size > 0) {
-    const countryName = Array.from(incorrectCountryNames).at(0)!;
-    const countryMatch = getCountryByName(countryName, true);
+    if (incorrectCountryNames.size > 0) {
+      const countryName = Array.from(incorrectCountryNames).at(0)!;
+      const countryMatch = getCountryByName(countryName, true);
 
-    if (countryMatch) {
-      return [countryMatch.alpha3.toUpperCase(), stockObj] as const;
+      if (countryMatch) {
+        await kv.set(url, [countryMatch]);
+        return [countryMatch.alpha3.toUpperCase(), stockObj] as const;
+      } else {
+        await kv.set(url, [{ cca3: "Unknown" }]);
+        return ["Unknown", stockObj] as const;
+      }
     } else {
-      return ["Unknown", stockObj] as const;
+      return [country, stockObj] as const;
     }
-  } else {
-    return [country, stockObj] as const;
+  } catch (e) {
+    console.log(e);
+    await kv.set(url, [{ cca3: "Unknown" }]);
+    return ["Unknown", stockObj] as const;
   }
 };

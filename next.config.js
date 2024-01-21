@@ -6,9 +6,8 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
-  compress: true,
   reactStrictMode: true,
-  poweredByHeader: false,
+  compress: true,
   productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
